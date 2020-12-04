@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 # Day 3
+import sys
 
 inputfile = open('day3input', 'r')
 
@@ -8,6 +9,7 @@ pathwithtrees = inputfile.read().splitlines()
 def replace_char(position, hillpath):
     before = position 
     after = position + 1
+    #print(position)
     if hillpath[position] == '#':
         return hillpath[:before] + 'X' + hillpath[after:]
     else:
@@ -15,10 +17,11 @@ def replace_char(position, hillpath):
 
 def check_tree(position, hillpath):
     hillpath_temp = hillpath
-    if position > 31:
+    if position > 30:
         position = position % 31
 
-    #print(replace_char(position, hillpath_temp))
+    #print(position)
+    #print(replace_char(position, hillpath_temp), position)
 
     if hillpath_temp[position] == '#':
         return 1
@@ -42,12 +45,17 @@ for x in scenario:
     toboggan = 0
     tree_count = 0
     line_count = 1
+    #print('down', down)
+    if down == 2:
+        line_count = line_count + 1
 
     for line in pathwithtrees:
         if line_count % down == 0:
             tree_hit = check_tree(toboggan, line)
             toboggan = toboggan + slope
             tree_count = tree_count + tree_hit
+            #print(tree_count)
+        #print(line_count)
         line_count = line_count + 1
 
     print(tree_count)
