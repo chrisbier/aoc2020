@@ -31,6 +31,8 @@ def calc_seat(seat_raw, seat_number):
 def calculate_seatid(fb_seat, lr_seat):
     return (fb_seat * 8) + lr_seat
 
+seats = []
+
 for seat_code in inputfile:
     fb_seat_temp = fb_seat
     lr_seat_temp = lr_seat
@@ -48,4 +50,12 @@ for seat_code in inputfile:
         seat_id_max = seat_id
     #print(list(seat_code))
     #print('Row:', seat_row, 'Side:', seat_side, 'ID:', seat_id)
-print(seat_id_max)
+    seats.append(seat_id)
+    #print(seat_id)
+#print(seat_id_max)
+print(sorted(seats))
+prev = 0
+for x in sorted(seats):
+    if x - prev > 1:
+        print(prev, x)
+    prev = x
