@@ -3,12 +3,14 @@
 import sys
 import re
 import pprint
+import networkx as nx
 
 pp = pprint.PrettyPrinter(indent=4)
 
 inputfile = open('day7input_example2', 'r')
 
 rules_graph = lookup_graph = {'other': []}
+rules_graph2 = lookup_graph = {'other': []}
 rules_graph_count = {'other': [0]}
 bag_to_find = 'shiny gold'
 
@@ -20,7 +22,7 @@ def count_and_find_all_path(graph, start, end, count_graph, counter=1, path=[]):
     if start == end:
         return [path], counter
     for node in graph[start]:
-        print(graph[start], node, count_graph[node])
+        #print(graph[start], node, count_graph[node])
         if count_graph[node] != 0:
             counter = counter * count_graph[node]
         if node not in path:
@@ -47,6 +49,7 @@ line_count = 0
 for lines in rules_list:
     line_count = line_count + 1
     rule_group = []
+    rule_group2 = []
     rule_group_dict = {}
     rule_group_count = []
     #print(line_count)
@@ -63,6 +66,7 @@ for lines in rules_list:
         #print(child)
         #new_line = re.sub(get_numbers, lines)
         number_of_bags = children[0]
+        cc = int(number_of_bags)
         #print(number_of_bags)
 
         tokenized_child = children.split(' ')
@@ -72,24 +76,41 @@ for lines in rules_list:
         rule_group_count.append(number_of_bags)
         rule_group_dict.update({key_name: number_of_bags})
         rule_group.append(key_name)
+        while cc > 0:
+            rule_group2.append(key_name)
+            cc = cc - 1
 
     parent_container_actual = parent_container[0].split(' ')
-    #print(' '.join(parent_container_actual[0:-1]))
+    actual_name = ' '.join(parent_container_actual[0:-1])
+    #print(' '.join(parent_container_actual[0:-1]), rule_group2)
     #print(rule_group)
     #print(rule_group_dict)
-    rules_graph.update({' '.join(parent_container_actual[0:-1]): rule_group})
-    lookup_graph.update({' '.join(parent_container_actual[0:-1]): rule_group_dict})
-    rules_graph_count.update({' '.join(parent_container_actual[0:-1]): int(rule_group_count[0])})
+    rules_graph.update({actual_name: rule_group})
+
+    print('before',rules_graph2)
+    rules_graph2.update({actual_name: rule_group2})
+    print('after', rules_graph2)
+    print()
+    
+    lookup_graph.update({actual_name: rule_group_dict})
+    
+    rules_graph_count.update({actual_name: int(rule_group_count[0])})
     
 
 #pp.pprint(rules_graph)
 
 bag_count = 1
 #for start_bag in rules_graph:
-#result_path = find_all_path(rules_graph, bag_to_find, 'other')
+result_path1 = find_all_path(rules_graph, bag_to_find, 'other')
 (result_path, counter) = count_and_find_all_path(rules_graph, bag_to_find, 'other', rules_graph_count)
-print(result_path, counter)
-print(rules_graph_count)
+#print(result_path)
+#print(result_path, counter)
+#print(rules_graph_count)
+
+#print(rules_graph2)
+count = 0
+#for node in result_path1:
+    
 
 #if result_path:
 #    result_path2 = result_path[0]
