@@ -6,7 +6,7 @@ import pprint
 
 pp = pprint.PrettyPrinter(indent=4)
 
-inputfile = open('day8input_example', 'r')
+inputfile = open('day8input', 'r')
 
 stack = []
 stack_pointer = 0
@@ -35,4 +35,5 @@ while stack_pointer > -1:
     else:
         stack_pointer = -1
         print('Boot Loop detected')
+        #print(loop_detector)
         #sys.exit('Boot Loop')
