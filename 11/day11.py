@@ -9,8 +9,6 @@ pp = pprint.PrettyPrinter(indent=4)
 inputfile = open('day11input_example', 'r')
 
 input_list = inputfile.read().split('\n')
-print("Start")
-pp.pprint(input_list)
 
 class SeatMatrix:
 
@@ -21,9 +19,16 @@ class SeatMatrix:
     max_column = 0
 
     def __init__(self, initial_seat_matrix):
-        self.seat_matrix = self.new_seat_matrix = initial_seat_matrix
+        self.seat_matrix = initial_seat_matrix.copy()
+        self.new_seat_matrix = initial_seat_matrix.copy()
         self.max_row = len(self.seat_matrix) - 1
         self.max_column = len(self.seat_matrix[0]) - 1
+
+    def dump(self):
+        return self.new_seat_matrix
+
+    def dumpold(self):
+        return self.seat_matrix
 
     def get_has_changed(self):
         return self.get_has_changed
@@ -42,9 +47,9 @@ class SeatMatrix:
         if column > self.max_column or row > self.max_row:
             return '.'
 
-        new_row = self.seat_matrix[row][:column] + seat_value
+        new_row = self.new_seat_matrix[row][:column] + seat_value
         if column < self.max_column:
-            end_values = self.seat_matrix[row][column + 1:]
+            end_values = self.new_seat_matrix[row][column + 1:]
             new_row = new_row + end_values
         self.new_seat_matrix[row] = new_row
         return new_row
@@ -70,10 +75,13 @@ class SeatMatrix:
 
     def fill_seat(self, column, row):
         self.set_seat_value(column, row, '#')
+        print(self.new_seat_matrix[row])
         self.has_changed_bool = True
-        pass
 
-seatmatrix = SeatMatrix(input_list)
+seatmatrix = SeatMatrix(input_list.copy())
+
+print("Start")
+pp.pprint(input_list)
 
 # Tests
 #print(seatmatrix.get_seat_value(0, 1))
@@ -95,15 +103,13 @@ seatmatrix = SeatMatrix(input_list)
 for row in range(len(input_list)):
     for column in range(len(input_list[row])):
         surrounded_count = seatmatrix.surrounded(column, row)
+        #print(column, row, surrounded_count)
         if surrounded_count > 3:
             seatmatrix.empty_seat(column, row)
-            has_changed_bool = True
         if surrounded_count == 0:
             seatmatrix.fill_seat(column, row)
-            has_changed_bool = True
 
 print("End")
-pp.pprint(input_list)
-
-# Add person
-# Remove people
+#pp.pprint(input_list)
+#pp.pprint(seatmatrix.dumpold())
+pp.pprint(seatmatrix.dump())
