@@ -6,7 +6,7 @@ import pprint
 
 pp = pprint.PrettyPrinter(indent=4)
 
-inputfile = open('day11input_example', 'r')
+inputfile = open('day11input', 'r')
 
 input_list = inputfile.read().split('\n')
 
