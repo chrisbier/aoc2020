@@ -36,21 +36,32 @@ class Navigation:
             return direction
 
         if direction == 'F':
-            # self.current_moving_direction = self.current_facing_direction
+            self.current_moving_direction = self.current_facing_direction
             return self.current_facing_direction
 
         if direction == 'L':
             #print('Current Facing Direction',self.current_facing_direction)
             new_direction_index = self.order_of_directions.index(self.current_facing_direction)
             #print('new direction index', new_direction_index)
-            new_direction_index = new_direction_index - int(distance / 90)
+            if new_direction_index - int(distance / 90) < 0:
+                new_direction_index = new_direction_index - int(distance / 90)
+                new_direction_index = new_direction_index + 4
+            else:
+                new_direction_index = new_direction_index - int(distance / 90)
             #print('new direction index after', new_direction_index)
             if new_direction_index == -1:
                 new_direction_index = 3
         
         if direction == 'R':
+            print('Current Facing Direction',self.current_facing_direction)
             new_direction_index = self.order_of_directions.index(self.current_facing_direction)
-            new_direction_index = new_direction_index + int(distance / 90)
+            print('new direction index', new_direction_index)
+            if new_direction_index + int(distance / 90) > 3:
+                new_direction_index = new_direction_index + int(distance / 90)
+                new_direction_index = new_direction_index - 4
+            else:
+                new_direction_index = new_direction_index + int(distance / 90)
+            print('new direction index after', new_direction_index)
             if new_direction_index > 3:
                 new_direction_index = 0
         
@@ -89,10 +100,12 @@ class Navigation:
 
 
 navigation = Navigation()
+line = 0
 
 # Read in data
 for direction in input_list:
-    print('---------')
+    line = line + 1
+    print(line, '---------')
     print(direction)
     (en, nn) = new_coordinates = navigation.process_direction(direction)
     print(new_coordinates, '=', abs(en)+abs(nn))
