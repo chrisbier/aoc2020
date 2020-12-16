@@ -11,7 +11,7 @@ inputfile = open('day7input_example2', 'r')
 
 rules_graph = lookup_graph = {'other': []}
 rules_graph2 = lookup_graph = {'other': []}
-rules_graph_count = {'other': [0]}
+rules_graph_count = {'other': 0}
 bag_to_find = 'shiny gold'
 
 rules_list = inputfile.read().replace('bags', 'bag').split('\n')
@@ -24,7 +24,10 @@ def count_and_find_all_path(graph, start, end, count_graph, counter=1, path=[]):
     for node in graph[start]:
         #print(graph[start], node, count_graph[node])
         if count_graph[node] != 0:
-            counter = counter * count_graph[node]
+            if isinstance(count_graph[node], list):
+                counter = counter * count_graph[node][0]
+            else:
+                counter = counter * count_graph[node]
         if node not in path:
             (newpath, counter) = count_and_find_all_path(graph, node, end, count_graph, counter, path)
             for np in newpath:
@@ -87,10 +90,10 @@ for lines in rules_list:
     #print(rule_group_dict)
     rules_graph.update({actual_name: rule_group})
 
-    print('before',rules_graph2)
+    #print('before',rules_graph2)
     rules_graph2.update({actual_name: rule_group2})
-    print('after', rules_graph2)
-    print()
+    #print('after', rules_graph2)
+    #print()
     
     lookup_graph.update({actual_name: rule_group_dict})
     
@@ -103,11 +106,12 @@ bag_count = 1
 #for start_bag in rules_graph:
 result_path1 = find_all_path(rules_graph, bag_to_find, 'other')
 (result_path, counter) = count_and_find_all_path(rules_graph, bag_to_find, 'other', rules_graph_count)
-#print(result_path)
-#print(result_path, counter)
+print(result_path1[0])
+#print(result_path[0], counter)
 #print(rules_graph_count)
+print(lookup_graph)
 
-#print(rules_graph2)
+print(rules_graph2)
 count = 0
 #for node in result_path1:
     
