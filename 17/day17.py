@@ -10,8 +10,9 @@ inputfile = open('day17input_example', 'r')
 
 input_list = inputfile.read().split('\n')
 
+# Try dict instead?  {'013': '#', '014': '#', '111': '#'}
 class Cubes:
-    cubes = [ [ [ '.' for x in range(13) ] for y in range(13) ] for z in range(13) ]
+    cubes = [ [ [ '.' for x in range(10) ] for y in range(10) ] for z in range(10) ]
     cubes_new = []
 
     def __init__(self, initial_cube):
@@ -32,8 +33,9 @@ class Cubes:
         try:
             return self.cubes[dimension][row][column]
         except:
-            print(dimension, row, column)
-            sys.exit(1)
+            return '.'
+            #print(dimension, row, column)
+            #sys.exit(1)
 
     def check_surrounding_cells(self, dimension, row, column):
         count = 0
