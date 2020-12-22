@@ -16,6 +16,7 @@ class Ingredients:
 
     ingredient_list = []
     allergen_dict = {}
+    allergen_list = []
     not_allergen_dict = {}
     results = {}
     results_least = []
@@ -34,28 +35,14 @@ class Ingredients:
         ingredient_list = ingredients.split(' ')
 
         # Process ingredients into full list of everything
-        self.ingredient_list = list(set(ingredient_list) | set(self.ingredient_list))
+        for ing in ingredient_list:
+            self.ingredient_list.append(ing)
 
         # Process Allergens into allergen_dict
-        if len(allergen_list) > 1:
-            for allergen in allergen_list:
-                if allergen in self.allergen_dict:
-                    new_list = self.allergen_dict[allergen]
-                    for x in ingredient_list:
-                        # Exclude any in both lists
-                        # Add if not in new_list
-                        if x in new_list:
-                            new_list.remove(x)
-                        else:
-                            new_list.append(x)
-                else:
-                    new_list = ingredient_list
-                self.allergen_dict.update({allergen: new_list})
-        else:
-            allergen = allergen_list[0]
+        for allergen in allergen_list:
             if allergen in self.allergen_dict:
                 new_list = self.allergen_dict[allergen]
-                #new_list = list(set(new_list) | set(ingredient_list))
+                new_list = list(set(new_list) & set(ingredient_list))
             else:
                 new_list = ingredient_list
             self.allergen_dict.update({allergen: new_list})
@@ -87,6 +74,18 @@ class Ingredients:
         #self.results.update({key: value for key, value in sorted(results_temp.items(), key=lambda item: item[1])})
         return self.results
     
+    def definitely_not_3(self):
+        self.allergen_list = [ item for allergen in self.allergen_dict.values() for item in allergen ]
+        #print(self.allergen_list)
+        print(self.ingredient_list)
+
+        count = 0
+        for ing in self.ingredient_list:
+            if ing not in self.allergen_list:
+                count = count + 1
+
+        return count
+
     def definitely_not2(self):
         # for each ingredient, if not in any allergen list, then save to not list
         not_allergen_list = []
@@ -122,14 +121,15 @@ ingredients = Ingredients()
 for line in input_list:
     ingredients.readline(line.split(' (contains '))
 
-for line in input_list:
-    ingredients.play_it_again_sam(line.split(' (contains '))
+#for line in input_list:
+#    ingredients.play_it_again_sam(line.split(' (contains '))
 
 #for (k,v) in ingredients.most_likely().items():
 #    print(k, v[0][0])# .keys()[-3:])
 
 print(ingredients.get_allergens())
-print([x for x in ingredients.not_allergen_list if x])
+print(ingredients.definitely_not_3())
+#print([x for x in ingredients.not_allergen_list if x])
 
 #print(ingredients.ingredient_list)
 #defnot = ingredients.definitely_not()
